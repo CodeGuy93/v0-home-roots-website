@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { notFound, useSearchParams } from "next/navigation"
+import { notFound } from "next/navigation"
 import { ArrowLeft, FileText, BookOpen, Users, HelpCircle, Calendar, ListChecks } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -16,37 +16,45 @@ import StateGettingStarted from "@/components/state-getting-started"
 import EnhancedPDFGenerator from "@/components/enhanced-pdf-generator"
 import StateChecklist from "@/components/state-checklist"
 import { useEffect } from "react"
-import { TabQueryHandler } from "./tab-query-handler"
 import StarterKitButton from "@/components/starter-kit-button"
 
-export function TabQueryHandlerComponent() {
-  const searchParams = useSearchParams()
-  const tabParam = searchParams.get("tab")
-
+// Separate component for tab query handling to avoid useSearchParams issues
+const TabQueryHandler = () => {
   useEffect(() => {
+    // Get tab from URL if present
+    const searchParams = new URLSearchParams(window.location.search)
+    const tabParam = searchParams.get("tab")
+
     if (tabParam) {
       const tabElement = document.querySelector(`[data-value="${tabParam}"]`) as HTMLButtonElement
       if (tabElement) {
         tabElement.click()
       }
     }
-  }, [tabParam])
+  }, [])
 
   return null
 }
 
 export default function StatePageClient({ params }: { params: { code: string } }) {
-  const stateCode = params.code.toUpperCase()
+  // Safety check for params
+  if (!params || typeof params.code !== "string") {
+    return notFound()
+  }
+
+  // Convert to uppercase safely
+  const stateCode = String(params.code).toUpperCase()
+
+  // Check if this is a valid state
+  if (!Object.keys(statesData).includes(stateCode)) {
+    return notFound()
+  }
 
   // First check the enhanced data
   const enhancedStateData = enhancedStatesData[stateCode]
 
   // Fall back to basic data if enhanced isn't available yet
   const basicStateData = statesData[stateCode]
-
-  if (!basicStateData) {
-    notFound()
-  }
 
   // Use enhanced data if available, otherwise use basic data
   const stateData = enhancedStateData || {
@@ -63,7 +71,7 @@ export default function StatePageClient({ params }: { params: { code: string } }
 
   return (
     <div className="container py-16">
-      <TabQueryHandlerComponent />
+      <TabQueryHandler />
       <Button variant="ghost" asChild className="mb-8">
         <Link href="/states" className="flex items-center gap-2">
           <ArrowLeft className="h-4 w-4" />
@@ -151,7 +159,6 @@ export default function StatePageClient({ params }: { params: { code: string } }
           </div>
         </div>
       </div>
-      <TabQueryHandler />
     </div>
   )
 }

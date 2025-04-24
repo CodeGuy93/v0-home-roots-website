@@ -1,18 +1,20 @@
 "use client"
 
 import { useEffect } from "react"
-import { useSearchParams, useRouter } from "next/navigation"
 
 export function TabQueryHandler() {
-  const searchParams = useSearchParams()
-  const router = useRouter()
-
   useEffect(() => {
-    const tab = searchParams.get("tab")
-    if (tab) {
-      router.push(`?tab=${tab}`, { scroll: false })
+    // Get tab from URL if present
+    const searchParams = new URLSearchParams(window.location.search)
+    const tabParam = searchParams.get("tab")
+
+    if (tabParam) {
+      const tabElement = document.querySelector(`[data-value="${tabParam}"]`) as HTMLButtonElement
+      if (tabElement) {
+        tabElement.click()
+      }
     }
-  }, [searchParams, router])
+  }, [])
 
   return null
 }

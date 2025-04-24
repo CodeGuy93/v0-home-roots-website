@@ -8,18 +8,23 @@ export function generateStaticParams() {
   }))
 }
 
-export async function generateMetadata({ params }: { params: { code?: string } }): Promise<Metadata> {
-  // Add a safety check for undefined params.code
-  if (!params.code) {
-    return {
-      title: "State Not Found | HomeRoots",
-      description: "The requested state information could not be found.",
-    }
+export async function generateMetadata({ params }: { params: { code: string } }): Promise<Metadata> {
+  // Default metadata in case of any issues
+  const defaultMetadata = {
+    title: "State Homeschool Information | HomeRoots",
+    description: "Find homeschooling information, requirements, and resources by state.",
   }
 
-  const stateCode = params.code.toUpperCase()
-  const stateData = statesData[stateCode]
+  // Safety check
+  if (!params || typeof params.code !== "string") {
+    return defaultMetadata
+  }
 
+  // Convert to uppercase safely
+  const stateCode = String(params.code).toUpperCase()
+
+  // Check if state exists
+  const stateData = statesData[stateCode]
   if (!stateData) {
     return {
       title: "State Not Found | HomeRoots",
@@ -39,11 +44,8 @@ export async function generateMetadata({ params }: { params: { code?: string } }
   }
 }
 
-export default function StatePage({ params }: { params: { code?: string } }) {
-  // Add a safety check for the client component as well
-  if (!params.code) {
-    return <div>State code is required</div>
-  }
-
+export default function StatePage({ params }: { params: { code: string } }) {
+  // We don't need to do any processing here, just pass the params to the client component
+  // The client component will handle validation and error states
   return <StatePageClient params={params} />
 }
