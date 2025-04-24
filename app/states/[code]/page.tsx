@@ -8,7 +8,15 @@ export function generateStaticParams() {
   }))
 }
 
-export async function generateMetadata({ params }: { params: { code: string } }): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: { code?: string } }): Promise<Metadata> {
+  // Add a safety check for undefined params.code
+  if (!params.code) {
+    return {
+      title: "State Not Found | HomeRoots",
+      description: "The requested state information could not be found.",
+    }
+  }
+
   const stateCode = params.code.toUpperCase()
   const stateData = statesData[stateCode]
 
@@ -31,6 +39,11 @@ export async function generateMetadata({ params }: { params: { code: string } })
   }
 }
 
-export default function StatePage({ params }: { params: { code: string } }) {
+export default function StatePage({ params }: { params: { code?: string } }) {
+  // Add a safety check for the client component as well
+  if (!params.code) {
+    return <div>State code is required</div>
+  }
+
   return <StatePageClient params={params} />
 }
