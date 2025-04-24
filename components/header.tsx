@@ -30,6 +30,9 @@ export default function Header() {
           <Link href="/starter-kits" className="text-sm font-medium hover:text-primary">
             Starter Kits
           </Link>
+          <Link href="/curriculum-finder" className="text-sm font-medium transition-colors hover:text-primary">
+            Curriculum Finder
+          </Link>
           <Link href="#marketplace" className="text-sm font-medium hover:text-primary">
             Marketplace
           </Link>
@@ -87,6 +90,13 @@ export default function Header() {
                 onClick={() => setIsMenuOpen(false)}
               >
                 Starter Kits
+              </Link>
+              <Link
+                href="/curriculum-finder"
+                className="text-lg font-medium hover:text-primary"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Curriculum Finder
               </Link>
               <Link
                 href="#marketplace"

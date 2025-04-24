@@ -10,7 +10,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
-import { Clock, ExternalLink, Share2, Trash2 } from "lucide-react"
+import { Clock, ExternalLink, Share2, Trash2, ChevronDown, ChevronUp } from "lucide-react"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,6 +30,7 @@ import {
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import { toast } from "@/hooks/use-toast"
+import { useMediaQuery } from "@/hooks/use-media-query"
 
 interface InteractiveChecklistProps {
   stateCode: string
@@ -44,6 +45,8 @@ export default function InteractiveChecklist({ stateCode, stateName, items }: In
   const [showOnlyRequired, setShowOnlyRequired] = useState(false)
   const [isEmailDialogOpen, setIsEmailDialogOpen] = useState(false)
   const [email, setEmail] = useState("")
+  const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>({})
+  const isMobile = useMediaQuery("(max-width: 768px)")
 
   // Load saved progress from localStorage on component mount
   useEffect(() => {
@@ -67,6 +70,14 @@ export default function InteractiveChecklist({ stateCode, stateName, items }: In
   // Toggle item completion
   const toggleItem = (id: string) => {
     setCompletedItems((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }))
+  }
+
+  // Toggle item expansion (for mobile)
+  const toggleExpanded = (id: string) => {
+    setExpandedItems((prev) => ({
       ...prev,
       [id]: !prev[id],
     }))
@@ -125,7 +136,7 @@ export default function InteractiveChecklist({ stateCode, stateName, items }: In
         <CardHeader>
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
-              <CardTitle className="text-2xl">Getting Started in {stateName}</CardTitle>
+              <CardTitle className="text-xl md:text-2xl">Getting Started in {stateName}</CardTitle>
               <CardDescription>Track your progress as you begin homeschooling</CardDescription>
             </div>
             <div className="flex items-center gap-2">
@@ -173,7 +184,7 @@ export default function InteractiveChecklist({ stateCode, stateName, items }: In
               <Progress value={progress} className="h-2" />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {Object.entries(categoryCounts).map(([category, { total, completed }]) => (
                 <Card key={category} className="bg-muted/50">
                   <CardContent className="p-4">
@@ -194,19 +205,31 @@ export default function InteractiveChecklist({ stateCode, stateName, items }: In
 
       <div className="flex flex-col md:flex-row justify-between gap-4 items-start md:items-center">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full md:w-auto">
-          <TabsList>
-            <TabsTrigger value="all">All</TabsTrigger>
-            <TabsTrigger value="legal">Legal</TabsTrigger>
-            <TabsTrigger value="planning">Planning</TabsTrigger>
-            <TabsTrigger value="recordkeeping">Records</TabsTrigger>
-            <TabsTrigger value="resources">Resources</TabsTrigger>
-            <TabsTrigger value="community">Community</TabsTrigger>
+          <TabsList className="w-full flex flex-wrap h-auto">
+            <TabsTrigger value="all" className="flex-grow">
+              All
+            </TabsTrigger>
+            <TabsTrigger value="legal" className="flex-grow">
+              Legal
+            </TabsTrigger>
+            <TabsTrigger value="planning" className="flex-grow">
+              Planning
+            </TabsTrigger>
+            <TabsTrigger value="recordkeeping" className="flex-grow">
+              Records
+            </TabsTrigger>
+            <TabsTrigger value="resources" className="flex-grow">
+              Resources
+            </TabsTrigger>
+            <TabsTrigger value="community" className="flex-grow">
+              Community
+            </TabsTrigger>
           </TabsList>
         </Tabs>
 
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-2 w-full md:w-auto justify-end">
           <Switch id="required-only" checked={showOnlyRequired} onCheckedChange={setShowOnlyRequired} />
-          <Label htmlFor="required-only">Show required items only</Label>
+          <Label htmlFor="required-only">Required only</Label>
         </div>
       </div>
 
@@ -227,14 +250,29 @@ export default function InteractiveChecklist({ stateCode, stateName, items }: In
                   />
                   <div className="flex-1 space-y-2">
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
-                      <Label
-                        htmlFor={item.id}
-                        className={`font-medium text-base ${
-                          completedItems[item.id] ? "line-through text-muted-foreground" : ""
-                        }`}
-                      >
-                        {item.title}
-                      </Label>
+                      <div className="flex items-center justify-between w-full md:w-auto">
+                        <Label
+                          htmlFor={item.id}
+                          className={`font-medium text-base ${
+                            completedItems[item.id] ? "line-through text-muted-foreground" : ""
+                          }`}
+                        >
+                          {item.title}
+                        </Label>
+                        {isMobile && (
+                          <button
+                            onClick={() => toggleExpanded(item.id)}
+                            className="md:hidden"
+                            aria-label={expandedItems[item.id] ? "Collapse" : "Expand"}
+                          >
+                            {expandedItems[item.id] ? (
+                              <ChevronUp className="h-5 w-5" />
+                            ) : (
+                              <ChevronDown className="h-5 w-5" />
+                            )}
+                          </button>
+                        )}
+                      </div>
                       <div className="flex flex-wrap gap-2">
                         {item.isRequired && (
                           <Badge
@@ -255,16 +293,20 @@ export default function InteractiveChecklist({ stateCode, stateName, items }: In
                         </Badge>
                       </div>
                     </div>
-                    <p className="text-sm text-muted-foreground">{item.description}</p>
-                    {item.helpLink && (
-                      <a
-                        href={item.helpLink}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-sm text-primary hover:underline inline-flex items-center gap-1"
-                      >
-                        {item.helpText || "Learn more"} <ExternalLink className="h-3 w-3" />
-                      </a>
+                    {(!isMobile || expandedItems[item.id]) && (
+                      <>
+                        <p className="text-sm text-muted-foreground">{item.description}</p>
+                        {item.helpLink && (
+                          <a
+                            href={item.helpLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-sm text-primary hover:underline inline-flex items-center gap-1"
+                          >
+                            {item.helpText || "Learn more"} <ExternalLink className="h-3 w-3" />
+                          </a>
+                        )}
+                      </>
                     )}
                   </div>
                 </div>

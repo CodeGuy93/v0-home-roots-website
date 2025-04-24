@@ -34,14 +34,36 @@ export default function StateResourcesList({
         </p>
       </div>
 
-      <Tabs defaultValue="all">
-        <TabsList className="mb-6">
-          <TabsTrigger value="all">All Resources</TabsTrigger>
-          {officialResources.length > 0 && <TabsTrigger value="official">Official</TabsTrigger>}
-          {legalResources.length > 0 && <TabsTrigger value="legal">Legal</TabsTrigger>}
-          {communityResources.length > 0 && <TabsTrigger value="community">Community</TabsTrigger>}
-          {curriculumResources.length > 0 && <TabsTrigger value="curriculum">Curriculum</TabsTrigger>}
-          {supportResources.length > 0 && <TabsTrigger value="support">Support</TabsTrigger>}
+      <Tabs defaultValue="all" className="w-full">
+        <TabsList className="mb-6 w-full flex flex-wrap h-auto">
+          <TabsTrigger value="all" className="flex-grow">
+            All
+          </TabsTrigger>
+          {officialResources.length > 0 && (
+            <TabsTrigger value="official" className="flex-grow">
+              Official
+            </TabsTrigger>
+          )}
+          {legalResources.length > 0 && (
+            <TabsTrigger value="legal" className="flex-grow">
+              Legal
+            </TabsTrigger>
+          )}
+          {communityResources.length > 0 && (
+            <TabsTrigger value="community" className="flex-grow">
+              Community
+            </TabsTrigger>
+          )}
+          {curriculumResources.length > 0 && (
+            <TabsTrigger value="curriculum" className="flex-grow">
+              Curriculum
+            </TabsTrigger>
+          )}
+          {supportResources.length > 0 && (
+            <TabsTrigger value="support" className="flex-grow">
+              Support
+            </TabsTrigger>
+          )}
         </TabsList>
 
         <TabsContent value="all">
@@ -110,9 +132,9 @@ function ResourceCard({ resource }: { resource: Resource }) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center justify-between">
-          <span>{resource.name}</span>
-          <span className="text-xs px-2 py-1 bg-secondary text-secondary-foreground rounded-full">
+        <CardTitle className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+          <span className="break-words">{resource.name}</span>
+          <span className="text-xs px-2 py-1 bg-secondary text-secondary-foreground rounded-full w-fit">
             {resource.category}
           </span>
         </CardTitle>
