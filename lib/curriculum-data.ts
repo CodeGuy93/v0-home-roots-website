@@ -403,6 +403,8 @@ export const curriculumOptions: CurriculumItem[] = [
   },
 ]
 
+export const curriculumData = curriculumOptions
+
 export const subjectOptions = [
   "Mathematics",
   "Language Arts",
