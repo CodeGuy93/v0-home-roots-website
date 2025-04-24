@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input"
 import { statesData } from "@/lib/states-data"
 import { enhancedStatesData } from "@/lib/enhanced-state-data"
 import { MapPin, Search } from "lucide-react"
+import { Button } from "@/components/ui/button"
 
 export const metadata = {
   title: "Homeschool Laws by State | HomeRoots",
@@ -47,6 +48,32 @@ export default function StatesPage() {
         <div className="relative max-w-md mx-auto mb-12">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
           <Input placeholder="Search for your state..." className="pl-10" />
+        </div>
+        <div className="flex justify-center mt-4">
+          <Button asChild>
+            <Link href="/compare" className="flex items-center gap-2">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="h-4 w-4"
+              >
+                <path d="M18 8V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h8" />
+                <path d="M10 19v-3.96 3.15" />
+                <path d="M7 19h5" />
+                <rect width="7" height="5" x="16" y="14" rx="1" />
+                <path d="M21 12V8h-7" />
+                <path d="m18 5-3 3 3 3" />
+              </svg>
+              Compare States
+            </Link>
+          </Button>
         </div>
       </div>
 

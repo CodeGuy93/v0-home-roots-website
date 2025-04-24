@@ -1,8 +1,9 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import type { EnhancedStateData } from "@/lib/enhanced-state-data"
-import { CheckCircle, Download } from "lucide-react"
+import { CheckCircle } from "lucide-react"
 import Link from "next/link"
+import StarterKitButton from "@/components/starter-kit-button"
 
 export default function StateGettingStarted({
   stateData,
@@ -81,10 +82,7 @@ export default function StateGettingStarted({
           Download our free starter kit with {stateData.name}-specific information, including a sample withdrawal
           letter, record-keeping templates, and curriculum planning guides.
         </p>
-        <Button variant="secondary" size="lg" className="gap-2">
-          <Download className="h-4 w-4" />
-          Download Free Starter Kit
-        </Button>
+        <StarterKitButton variant="secondary" size="lg" stateCode={stateData.code} />
       </div>
 
       <div className="text-center">

@@ -4,11 +4,13 @@ import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { BookOpen, Calendar, Users, FileText } from "lucide-react"
+import { BookOpen, Calendar, Users } from "lucide-react"
+import DashboardChecklistProgress from "@/components/dashboard-checklist-progress"
 
 type User = {
   name: string
   email: string
+  state?: string
 }
 
 export default function Dashboard() {
@@ -44,6 +46,10 @@ export default function Dashboard() {
     return null // Router will redirect
   }
 
+  // For demo purposes, we'll assume the user is in Texas
+  const userState = user.state || "TX"
+  const userStateName = "Texas" // In a real app, you'd look this up
+
   return (
     <div className="container py-12">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
@@ -57,6 +63,8 @@ export default function Dashboard() {
       </div>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <DashboardChecklistProgress stateCode={userState} stateName={userStateName} />
+
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
             <CardTitle className="text-sm font-medium">My Resources</CardTitle>
@@ -85,16 +93,6 @@ export default function Dashboard() {
           <CardContent>
             <div className="text-2xl font-bold">28</div>
             <p className="text-xs text-muted-foreground">Connected homeschool families</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-            <CardTitle className="text-sm font-medium">Lesson Plans</CardTitle>
-            <FileText className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">7</div>
-            <p className="text-xs text-muted-foreground">Saved and created lesson plans</p>
           </CardContent>
         </Card>
       </div>

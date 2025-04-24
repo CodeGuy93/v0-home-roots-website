@@ -1,5 +1,6 @@
-import { Button } from "@/components/ui/button"
 import Link from "next/link"
+import { Button } from "@/components/ui/button"
+import StarterKitButton from "@/components/starter-kit-button"
 
 export default function Hero() {
   return (
@@ -13,9 +14,7 @@ export default function Hero() {
           join a movement of support.
         </p>
         <div className="mt-8 flex flex-col gap-4 sm:flex-row">
-          <Button size="lg" asChild>
-            <Link href="#download">Download Free Starter Kit</Link>
-          </Button>
+          <StarterKitButton size="lg" />
           <Button size="lg" variant="outline" asChild>
             <Link href="#laws">Explore State Laws</Link>
           </Button>

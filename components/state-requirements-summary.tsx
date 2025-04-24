@@ -3,6 +3,9 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { InfoIcon, CheckIcon, XIcon } from "lucide-react"
 import type { EnhancedStateData } from "@/lib/enhanced-state-data"
 
+// Add the imports at the top
+import PDFDownloadButton from "@/components/pdf-download-button"
+
 export default function StateRequirementsSummary({
   stateData,
 }: {
@@ -186,6 +189,10 @@ export default function StateRequirementsSummary({
           </AlertDescription>
         </Alert>
       )}
+      {/* Add this at the end of the component, just before the closing </div> */}
+      <div className="mt-8 flex justify-center">
+        <PDFDownloadButton stateCode={stateData.code} stateName={stateData.name} />
+      </div>
     </div>
   )
 }

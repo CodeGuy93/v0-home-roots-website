@@ -27,6 +27,9 @@ export default function Header() {
           <Link href="/states" className="text-sm font-medium hover:text-primary">
             State Laws
           </Link>
+          <Link href="/starter-kits" className="text-sm font-medium hover:text-primary">
+            Starter Kits
+          </Link>
           <Link href="#marketplace" className="text-sm font-medium hover:text-primary">
             Marketplace
           </Link>
@@ -77,6 +80,13 @@ export default function Header() {
                 onClick={() => setIsMenuOpen(false)}
               >
                 State Laws
+              </Link>
+              <Link
+                href="/starter-kits"
+                className="text-lg font-medium hover:text-primary"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Starter Kits
               </Link>
               <Link
                 href="#marketplace"
