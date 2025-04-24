@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useSearchParams, useRouter } from "next/navigation"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { StateSelector } from "@/components/state-selector"
@@ -11,21 +11,25 @@ import { ArrowLeft, Plus, X } from "lucide-react"
 import Link from "next/link"
 
 export default function StateComparisonClient() {
-  const searchParams = useSearchParams()
   const router = useRouter()
   const [selectedStates, setSelectedStates] = useState<string[]>([])
   const [comparisonData, setComparisonData] = useState<ComparisonData[]>([])
-  const [isLoading, setIsLoading] = useState(true)
+  const [isClient, setIsClient] = useState(false)
 
-  // Initialize from URL params
+  // Handle client-side rendering and URL params
   useEffect(() => {
-    const states = searchParams.get("states")
-    if (states) {
-      const statesList = states.split(",").filter(Boolean).slice(0, 3)
-      setSelectedStates(statesList)
+    setIsClient(true)
+
+    // Parse URL params on client side only
+    if (typeof window !== "undefined") {
+      const searchParams = new URLSearchParams(window.location.search)
+      const states = searchParams.get("states")
+      if (states) {
+        const statesList = states.split(",").filter(Boolean).slice(0, 3)
+        setSelectedStates(statesList)
+      }
     }
-    setIsLoading(false)
-  }, [searchParams])
+  }, [])
 
   // Update comparison data when selected states change
   useEffect(() => {
@@ -33,15 +37,19 @@ export default function StateComparisonClient() {
       const data = getComparisonData(selectedStates)
       setComparisonData(data)
 
-      // Update URL
-      const newParams = new URLSearchParams()
-      newParams.set("states", selectedStates.join(","))
-      router.push(`/compare?${newParams.toString()}`, { scroll: false })
+      if (isClient) {
+        // Update URL
+        const newParams = new URLSearchParams()
+        newParams.set("states", selectedStates.join(","))
+        router.push(`/compare?${newParams.toString()}`, { scroll: false })
+      }
     } else {
       setComparisonData([])
-      router.push("/compare", { scroll: false })
+      if (isClient && window.location.search) {
+        router.push("/compare", { scroll: false })
+      }
     }
-  }, [selectedStates, router])
+  }, [selectedStates, router, isClient])
 
   const addState = (stateCode: string) => {
     if (selectedStates.length < 3 && !selectedStates.includes(stateCode)) {
@@ -53,10 +61,6 @@ export default function StateComparisonClient() {
     const newStates = [...selectedStates]
     newStates.splice(index, 1)
     setSelectedStates(newStates)
-  }
-
-  if (isLoading) {
-    return <div className="container py-16 flex justify-center">Loading...</div>
   }
 
   return (
