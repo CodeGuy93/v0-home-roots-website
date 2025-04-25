@@ -21,15 +21,19 @@ import StarterKitButton from "@/components/starter-kit-button"
 // Separate component for tab query handling to avoid useSearchParams issues
 const TabQueryHandler = () => {
   useEffect(() => {
-    // Get tab from URL if present
-    const searchParams = new URLSearchParams(window.location.search)
-    const tabParam = searchParams.get("tab")
+    try {
+      // Get tab from URL if present
+      const searchParams = new URLSearchParams(window.location.search)
+      const tabParam = searchParams.get("tab")
 
-    if (tabParam) {
-      const tabElement = document.querySelector(`[data-value="${tabParam}"]`) as HTMLButtonElement
-      if (tabElement) {
-        tabElement.click()
+      if (tabParam) {
+        const tabElement = document.querySelector(`[data-value="${tabParam}"]`) as HTMLButtonElement
+        if (tabElement) {
+          tabElement.click()
+        }
       }
+    } catch (error) {
+      console.error("Error handling tab query:", error)
     }
   }, [])
 
@@ -38,12 +42,18 @@ const TabQueryHandler = () => {
 
 export default function StatePageClient({ params }: { params: { code: string } }) {
   // Safety check for params
-  if (!params || typeof params.code !== "string") {
+  if (!params || typeof params.code !== "string" || !params.code) {
     return notFound()
   }
 
   // Convert to uppercase safely
-  const stateCode = String(params.code).toUpperCase()
+  let stateCode: string
+  try {
+    stateCode = String(params.code).toUpperCase()
+  } catch (error) {
+    console.error("Error converting state code to uppercase:", error)
+    return notFound()
+  }
 
   // Check if this is a valid state
   if (!Object.keys(statesData).includes(stateCode)) {
@@ -55,6 +65,11 @@ export default function StatePageClient({ params }: { params: { code: string } }
 
   // Fall back to basic data if enhanced isn't available yet
   const basicStateData = statesData[stateCode]
+
+  // Safety check for basic state data
+  if (!basicStateData) {
+    return notFound()
+  }
 
   // Use enhanced data if available, otherwise use basic data
   const stateData = enhancedStateData || {

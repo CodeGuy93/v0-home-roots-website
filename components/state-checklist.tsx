@@ -1,10 +1,12 @@
-import { stateChecklists, defaultChecklist } from "@/lib/checklist-data"
-import InteractiveChecklist from "@/components/interactive-checklist"
+"use client"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
-import { CheckCircle } from "lucide-react"
+import { stateChecklists, defaultChecklist } from "@/lib/checklist-data"
 import Link from "next/link"
 import StarterKitButton from "@/components/starter-kit-button"
+import { CheckCircle } from "lucide-react"
 
 interface StateChecklistProps {
   stateCode: string
@@ -12,8 +14,23 @@ interface StateChecklistProps {
 }
 
 export default function StateChecklist({ stateCode, stateName }: StateChecklistProps) {
+  // Safety check for stateCode and stateName
+  if (!stateCode || !stateName) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Homeschool Checklist</CardTitle>
+          <CardDescription>Invalid state information provided.</CardDescription>
+        </CardHeader>
+      </Card>
+    )
+  }
+
+  // Convert stateCode to uppercase safely
+  const safeStateCode = String(stateCode).toUpperCase()
+
   // Get the state-specific checklist or use the default
-  const stateChecklist = stateChecklists[stateCode]
+  const stateChecklist = stateChecklists[safeStateCode]
   const checklistItems = stateChecklist ? stateChecklist.items : defaultChecklist
 
   return (
@@ -25,7 +42,22 @@ export default function StateChecklist({ stateCode, stateName }: StateChecklistP
         </p>
       </div>
 
-      <InteractiveChecklist stateCode={stateCode} stateName={stateName} items={checklistItems} />
+      <Card>
+        <CardHeader>
+          <CardTitle>Homeschool Checklist for {stateName}</CardTitle>
+          <CardDescription>Track your progress as you prepare to homeschool in {stateName}.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            {checklistItems.map((item, index) => (
+              <div key={index} className="flex items-center space-x-2">
+                <Checkbox id={`item-${index}`} />
+                <Label htmlFor={`item-${index}`}>{item}</Label>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
 
       <Card className="bg-primary text-primary-foreground">
         <CardHeader>
@@ -39,7 +71,7 @@ export default function StateChecklist({ stateCode, stateName }: StateChecklistP
         </CardHeader>
         <CardContent>
           <div className="flex flex-col sm:flex-row gap-4">
-            <StarterKitButton variant="secondary" stateCode={stateCode} />
+            <StarterKitButton variant="secondary" stateCode={safeStateCode} />
             <Button
               variant="outline"
               className="bg-transparent text-primary-foreground border-primary-foreground/20 hover:bg-primary-foreground/10"

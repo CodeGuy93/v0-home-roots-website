@@ -2,12 +2,14 @@ import { statesData } from "@/lib/states-data"
 import type { Metadata } from "next"
 import StatePageClient from "./StatePageClient"
 
+// This function generates the static paths for all states
 export function generateStaticParams() {
   return Object.keys(statesData).map((code) => ({
     code: code.toLowerCase(),
   }))
 }
 
+// This function generates the metadata for each state page
 export async function generateMetadata({ params }: { params: { code: string } }): Promise<Metadata> {
   // Default metadata in case of any issues
   const defaultMetadata = {
@@ -15,15 +17,22 @@ export async function generateMetadata({ params }: { params: { code: string } })
     description: "Find homeschooling information, requirements, and resources by state.",
   }
 
-  // Safety check
-  if (!params || typeof params.code !== "string") {
+  // Safety check - if params or params.code is missing, return default metadata
+  if (!params || !params.code) {
     return defaultMetadata
   }
 
-  // Convert to uppercase safely
-  const stateCode = String(params.code).toUpperCase()
+  // Convert to uppercase safely - ensure we have a string first
+  let stateCode: string
+  try {
+    stateCode = String(params.code).toUpperCase()
+  } catch (error) {
+    // If any error occurs during conversion, return default metadata
+    console.error("Error converting state code to uppercase:", error)
+    return defaultMetadata
+  }
 
-  // Check if state exists
+  // Check if state exists in our data
   const stateData = statesData[stateCode]
   if (!stateData) {
     return {
@@ -32,6 +41,7 @@ export async function generateMetadata({ params }: { params: { code: string } })
     }
   }
 
+  // Return state-specific metadata
   return {
     title: `${stateData.name} Homeschool Laws and Requirements | HomeRoots`,
     description: `Complete guide to homeschooling in ${stateData.name}: legal requirements, resources, local groups, and getting started tips.`,
@@ -44,8 +54,8 @@ export async function generateMetadata({ params }: { params: { code: string } })
   }
 }
 
+// The main page component
 export default function StatePage({ params }: { params: { code: string } }) {
-  // We don't need to do any processing here, just pass the params to the client component
-  // The client component will handle validation and error states
+  // We'll handle all validation in the client component
   return <StatePageClient params={params} />
 }

@@ -21,6 +21,12 @@ interface EnhancedPDFGeneratorProps {
 }
 
 export default function EnhancedPDFGenerator({ stateCode, stateName }: EnhancedPDFGeneratorProps) {
+  // Safety check for stateCode and stateName
+  const isValidState = !!(stateCode && stateName)
+
+  // Convert stateCode to uppercase safely
+  const safeStateCode = isValidState ? String(stateCode).toUpperCase() : ""
+
   const [isLoading, setIsLoading] = useState(false)
   const [selectedSections, setSelectedSections] = useState({
     requirements: true,
@@ -49,8 +55,8 @@ export default function EnhancedPDFGenerator({ stateCode, stateName }: EnhancedP
 
       // Create a link to download the PDF
       const link = document.createElement("a")
-      link.href = `/api/pdf/${stateCode.toLowerCase()}?${queryParams.toString()}`
-      link.download = `${stateCode.toUpperCase()}-homeschool-requirements.pdf`
+      link.href = `/api/pdf/${safeStateCode.toLowerCase()}?${queryParams.toString()}`
+      link.download = `${safeStateCode}-homeschool-requirements.pdf`
       document.body.appendChild(link)
       link.click()
       document.body.removeChild(link)
@@ -59,6 +65,10 @@ export default function EnhancedPDFGenerator({ stateCode, stateName }: EnhancedP
     } finally {
       setIsLoading(false)
     }
+  }
+
+  if (!isValidState) {
+    return null
   }
 
   return (
@@ -165,7 +175,7 @@ export default function EnhancedPDFGenerator({ stateCode, stateName }: EnhancedP
             <Button
               onClick={() => {
                 // In a real implementation, you would generate a shareable link
-                navigator.clipboard.writeText(`https://homeroots.com/states/${stateCode.toLowerCase()}`)
+                navigator.clipboard.writeText(`https://homeroots.com/states/${safeStateCode.toLowerCase()}`)
                 alert("Link copied to clipboard!")
               }}
               className="w-full gap-2"

@@ -1,42 +1,29 @@
 import type React from "react"
-import type { Metadata } from "next"
-import { Inter, Fraunces } from "next/font/google"
 import "./globals.css"
+import type { Metadata } from "next"
+import { Inter } from "next/font/google"
+import { ThemeProvider } from "@/components/theme-provider"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
-import { ThemeProvider } from "@/components/theme-provider"
+import { ErrorBoundary } from "@/components/error-boundary"
 
-const inter = Inter({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-inter",
-})
-
-const fraunces = Fraunces({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-fraunces",
-})
+const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "HomeRoots | Rooted in values. Built for learning.",
-  description:
-    "Helping families homeschool with confidence. Understand your state laws, explore community-led resources, and join a movement of support.",
-  viewport: "width=device-width, initial-scale=1, maximum-scale=1",
+  title: "HomeRoots - Your Homeschooling Resource",
+  description: "Find homeschooling resources, requirements, and community support.",
     generator: 'v0.dev'
 }
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${inter.variable} ${fraunces.variable}`} suppressHydrationWarning>
+    <html lang="en">
       <body className={inter.className}>
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <Header />
-          <main className="min-h-screen">{children}</main>
+          <ErrorBoundary>
+            <main>{children}</main>
+          </ErrorBoundary>
           <Footer />
         </ThemeProvider>
       </body>

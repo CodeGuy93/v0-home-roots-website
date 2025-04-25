@@ -24,8 +24,11 @@ export default function StarterKitButton({
 }: StarterKitButtonProps) {
   const [isLoading, setIsLoading] = useState(false)
 
+  // Safety check for stateCode
+  const safeStateCode = stateCode ? String(stateCode).toUpperCase() : undefined
+
   // Set default text based on whether we have a state code
-  const defaultText = stateCode ? `Download ${stateCode.toUpperCase()} Starter Kit` : "Download Free Starter Kit"
+  const defaultText = safeStateCode ? `Download ${safeStateCode} Starter Kit` : "Download Free Starter Kit"
 
   const buttonText = text || defaultText
 
@@ -37,13 +40,13 @@ export default function StarterKitButton({
       const link = document.createElement("a")
 
       // Use state-specific endpoint if provided
-      if (stateCode) {
-        link.href = `/api/starter-kit/${stateCode.toLowerCase()}`
+      if (safeStateCode) {
+        link.href = `/api/starter-kit/${safeStateCode.toLowerCase()}`
       } else {
         link.href = "/api/starter-kit"
       }
 
-      link.download = stateCode ? `${stateCode.toLowerCase()}-starter-kit.pdf` : "homeroots-starter-kit.pdf"
+      link.download = safeStateCode ? `${safeStateCode.toLowerCase()}-starter-kit.pdf` : "homeroots-starter-kit.pdf"
 
       document.body.appendChild(link)
       link.click()

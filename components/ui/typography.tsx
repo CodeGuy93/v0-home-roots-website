@@ -4,103 +4,73 @@ import type { ReactNode } from "react"
 interface TypographyProps {
   children: ReactNode
   className?: string
-  [key: string]: any
 }
 
-export function DisplayLarge({ children, className, ...props }: TypographyProps) {
-  return (
-    <h1 className={cn("font-display text-display-lg", className)} {...props}>
-      {children}
-    </h1>
-  )
+export function Heading1({ children, className }: TypographyProps) {
+  return <h1 className={cn("scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl", className)}>{children}</h1>
 }
 
-export function Display({ children, className, ...props }: TypographyProps) {
-  return (
-    <h1 className={cn("font-display text-display", className)} {...props}>
-      {children}
-    </h1>
-  )
+export function Heading2({ children, className }: TypographyProps) {
+  return <h2 className={cn("scroll-m-20 text-3xl font-semibold tracking-tight", className)}>{children}</h2>
 }
 
-export function Heading1({ children, className, ...props }: TypographyProps) {
-  return (
-    <h1 className={cn("text-heading-1", className)} {...props}>
-      {children}
-    </h1>
-  )
+export function Heading3({ children, className }: TypographyProps) {
+  return <h3 className={cn("scroll-m-20 text-2xl font-semibold tracking-tight", className)}>{children}</h3>
 }
 
-export function Heading2({ children, className, ...props }: TypographyProps) {
-  return (
-    <h2 className={cn("text-heading-2", className)} {...props}>
-      {children}
-    </h2>
-  )
+export function Heading4({ children, className }: TypographyProps) {
+  return <h4 className={cn("scroll-m-20 text-xl font-semibold tracking-tight", className)}>{children}</h4>
 }
 
-export function Heading3({ children, className, ...props }: TypographyProps) {
-  return (
-    <h3 className={cn("text-heading-3", className)} {...props}>
-      {children}
-    </h3>
-  )
+export function Heading5({ children, className }: TypographyProps) {
+  return <h5 className={cn("scroll-m-20 text-lg font-semibold tracking-tight", className)}>{children}</h5>
 }
 
-export function Title({ children, className, ...props }: TypographyProps) {
-  return (
-    <h4 className={cn("text-title", className)} {...props}>
-      {children}
-    </h4>
-  )
+export function Heading6({ children, className }: TypographyProps) {
+  return <h6 className={cn("scroll-m-20 text-base font-semibold tracking-tight", className)}>{children}</h6>
 }
 
-export function BodyLarge({ children, className, ...props }: TypographyProps) {
-  return (
-    <p className={cn("text-body-lg", className)} {...props}>
-      {children}
-    </p>
-  )
+export function Body({ children, className }: TypographyProps) {
+  return <p className={cn("leading-7", className)}>{children}</p>
 }
 
-export function Body({ children, className, ...props }: TypographyProps) {
-  return (
-    <p className={cn("text-body", className)} {...props}>
-      {children}
-    </p>
-  )
+export function Large({ children, className }: TypographyProps) {
+  return <div className={cn("text-lg font-semibold", className)}>{children}</div>
 }
 
-export function Small({ children, className, ...props }: TypographyProps) {
-  return (
-    <p className={cn("text-small", className)} {...props}>
-      {children}
-    </p>
-  )
+export function Small({ children, className }: TypographyProps) {
+  return <small className={cn("text-sm font-medium leading-none", className)}>{children}</small>
 }
 
-export function Tiny({ children, className, ...props }: TypographyProps) {
-  return (
-    <p className={cn("text-xs", className)} {...props}>
-      {children}
-    </p>
-  )
+export function Tiny({ children, className }: TypographyProps) {
+  return <small className={cn("text-xs text-muted-foreground", className)}>{children}</small>
 }
 
-// Add a generic Heading component that defaults to Heading2
-export function Heading({ children, className, ...props }: TypographyProps) {
-  return (
-    <h2 className={cn("text-heading-2", className)} {...props}>
-      {children}
-    </h2>
-  )
+export function Muted({ children, className }: TypographyProps) {
+  return <p className={cn("text-sm text-muted-foreground", className)}>{children}</p>
 }
 
-// Add a generic Text component that defaults to Body
-export function Text({ children, className, ...props }: TypographyProps) {
-  return (
-    <p className={cn("text-body", className)} {...props}>
-      {children}
-    </p>
-  )
+export function DisplayLarge({ children, className }: TypographyProps) {
+  return <h1 className={cn("scroll-m-20 text-5xl font-extrabold tracking-tight lg:text-6xl", className)}>{children}</h1>
+}
+
+export function Display({ children, className }: TypographyProps) {
+  return <h1 className={cn("scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl", className)}>{children}</h1>
+}
+
+export function Title({ children, className }: TypographyProps) {
+  return <div className={cn("text-lg font-semibold", className)}>{children}</div>
+}
+
+export function BodyLarge({ children, className }: TypographyProps) {
+  return <p className={cn("text-lg leading-7", className)}>{children}</p>
+}
+
+// Add the missing exports
+export function Heading({ children, className }: TypographyProps) {
+  return <Heading2 className={className}>{children}</Heading2>
+}
+
+export function Text({ children, className }: TypographyProps) {
+  return <Body className={className}>{children}</Body>
 }
