@@ -11,6 +11,12 @@ import FAQSection from "@/components/faq-section"
 import TrustIndicators from "@/components/trust-indicators"
 import CurriculumComparison from "@/components/curriculum-comparison"
 import EventsSection from "@/components/events-section"
+import LearningStyleQuiz from "@/components/learning-style-quiz"
+import ResourceLibrary from "@/components/resource-library"
+import CommunityPreview from "@/components/community-preview"
+import ProgressDashboardPreview from "@/components/progress-dashboard-preview"
+import PricingSection from "@/components/pricing-section"
+import PlannerPreview from "@/components/planner-preview"
 
 export default function Home() {
   return (
@@ -30,20 +36,38 @@ export default function Home() {
         {/* State Law Finder */}
         <StateLawFinder />
 
+        {/* Learning Style Quiz */}
+        <LearningStyleQuiz />
+
         {/* Curriculum Comparison */}
         <CurriculumComparison />
 
         {/* Success Stories */}
         <SuccessStories />
 
+        {/* Progress Dashboard Preview */}
+        <ProgressDashboardPreview />
+
+        {/* Resource Library */}
+        <ResourceLibrary />
+
+        {/* Planner Preview */}
+        <PlannerPreview />
+
+        {/* Community Preview */}
+        <CommunityPreview />
+
         {/* Testimonial Section */}
         <TestimonialSection />
+
+        {/* Events Section */}
+        <EventsSection />
 
         {/* FAQ Section */}
         <FAQSection />
 
-        {/* Events Section */}
-        <EventsSection />
+        {/* Pricing Section */}
+        <PricingSection />
 
         {/* CTA Section */}
         <CTASection />
